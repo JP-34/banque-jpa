@@ -5,19 +5,20 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
-@Entity
-@Table(name="compte")
-public class Compte {
+@MappedSuperclass
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class Compte {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -36,9 +37,17 @@ public class Compte {
 		joinColumns = @JoinColumn(name="ID_COMPT", referencedColumnName = "ID"),
 		inverseJoinColumns = @JoinColumn(name="ID_CLI", referencedColumnName = "ID"))
 	private Set<Client> clients;
-
+	
 	public Compte() {
 		
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getNumero() {
@@ -71,11 +80,6 @@ public class Compte {
 
 	public void setClients(Set<Client> clients) {
 		this.clients = clients;
-	}
-
-	@Override
-	public String toString() {
-		return "Compte numero=" + numero + ", solde=" + solde + ", operations=" + operations + "";
 	}
 	
 	
